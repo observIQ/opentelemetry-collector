@@ -96,7 +96,7 @@ func TestService_GetExporters(t *testing.T) {
 	assert.Contains(t, expMap[config.LogsDataType], config.NewComponentID("nop"))
 }
 
-func createExampleService(t *testing.T) *service {
+func createExampleService(t *testing.T) *Service {
 	// Create some factories.
 	factories, err := componenttest.NopFactories()
 	require.NoError(t, err)

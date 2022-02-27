@@ -70,7 +70,7 @@ type Collector struct {
 	meterProvider       metric.MeterProvider
 	zPagesSpanProcessor *zpages.SpanProcessor
 
-	service *service
+	service *Service
 	state   atomic.Value
 
 	// shutdownChan is used to terminate the collector.

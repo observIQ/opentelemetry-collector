@@ -27,8 +27,8 @@ import (
 	"go.opentelemetry.io/collector/service/internal/extensions"
 )
 
-// service represents the implementation of a component.Host.
-type service struct {
+// Service represents the implementation of a component.Host.
+type Service struct {
 	factories           component.Factories
 	buildInfo           component.BuildInfo
 	config              *config.Config
@@ -42,8 +42,8 @@ type service struct {
 	builtExtensions extensions.Extensions
 }
 
-func NewService(set *SvcSettings) (*service, error) {
-	srv := &service{
+func NewService(set *SvcSettings) (*Service, error) {
+	srv := &Service{
 		factories:           set.Factories,
 		buildInfo:           set.BuildInfo,
 		config:              set.Config,
@@ -78,7 +78,7 @@ func NewService(set *SvcSettings) (*service, error) {
 	return srv, nil
 }
 
-func (srv *service) Start(ctx context.Context) error {
+func (srv *Service) Start(ctx context.Context) error {
 	srv.telemetry.Logger.Info("Starting extensions...")
 	if err := srv.builtExtensions.StartAll(ctx, srv); err != nil {
 		return fmt.Errorf("failed to start extensions: %w", err)
@@ -102,7 +102,7 @@ func (srv *service) Start(ctx context.Context) error {
 	return srv.builtExtensions.NotifyPipelineReady()
 }
 
-func (srv *service) Shutdown(ctx context.Context) error {
+func (srv *Service) Shutdown(ctx context.Context) error {
 	// Accumulate errors and proceed with shutting down remaining components.
 	var errs error
 
@@ -140,11 +140,11 @@ func (srv *service) Shutdown(ctx context.Context) error {
 // ReportFatalError is used to report to the host that the receiver encountered
 // a fatal error (i.e.: an error that the instance can't recover from) after
 // its start function has already returned.
-func (srv *service) ReportFatalError(err error) {
+func (srv *Service) ReportFatalError(err error) {
 	srv.asyncErrorChannel <- err
 }
 
-func (srv *service) GetFactory(kind component.Kind, componentType config.Type) component.Factory {
+func (srv *Service) GetFactory(kind component.Kind, componentType config.Type) component.Factory {
 	switch kind {
 	case component.KindReceiver:
 		return srv.factories.Receivers[componentType]
@@ -158,10 +158,10 @@ func (srv *service) GetFactory(kind component.Kind, componentType config.Type) c
 	return nil
 }
 
-func (srv *service) GetExtensions() map[config.ComponentID]component.Extension {
+func (srv *Service) GetExtensions() map[config.ComponentID]component.Extension {
 	return srv.builtExtensions.ToMap()
 }
 
-func (srv *service) GetExporters() map[config.DataType]map[config.ComponentID]component.Exporter {
+func (srv *Service) GetExporters() map[config.DataType]map[config.ComponentID]component.Exporter {
 	return srv.builtExporters.ToMapByDataType()
 }

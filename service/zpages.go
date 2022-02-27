@@ -40,7 +40,7 @@ const (
 	zExtensionName = "zextensionname"
 )
 
-func (srv *service) RegisterZPages(mux *http.ServeMux, pathPrefix string) {
+func (srv *Service) RegisterZPages(mux *http.ServeMux, pathPrefix string) {
 	mux.Handle(path.Join(pathPrefix, tracezPath), otelzpages.NewTracezHandler(srv.zPagesSpanProcessor))
 	mux.HandleFunc(path.Join(pathPrefix, servicezPath), srv.handleServicezRequest)
 	mux.HandleFunc(path.Join(pathPrefix, pipelinezPath), srv.handlePipelinezRequest)
@@ -50,7 +50,7 @@ func (srv *service) RegisterZPages(mux *http.ServeMux, pathPrefix string) {
 	})
 }
 
-func (srv *service) handleServicezRequest(w http.ResponseWriter, r *http.Request) {
+func (srv *Service) handleServicezRequest(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	zpages.WriteHTMLPageHeader(w, zpages.HeaderData{Title: "service"})
 	zpages.WriteHTMLComponentHeader(w, zpages.ComponentHeaderData{
@@ -72,7 +72,7 @@ func (srv *service) handleServicezRequest(w http.ResponseWriter, r *http.Request
 	zpages.WriteHTMLPageFooter(w)
 }
 
-func (srv *service) handlePipelinezRequest(w http.ResponseWriter, r *http.Request) {
+func (srv *Service) handlePipelinezRequest(w http.ResponseWriter, r *http.Request) {
 	qValues := r.URL.Query()
 	pipelineName := qValues.Get(zPipelineName)
 	componentName := qValues.Get(zComponentName)
@@ -94,7 +94,7 @@ func (srv *service) handlePipelinezRequest(w http.ResponseWriter, r *http.Reques
 	zpages.WriteHTMLPageFooter(w)
 }
 
-func (srv *service) getPipelinesSummaryTableData() zpages.SummaryPipelinesTableData {
+func (srv *Service) getPipelinesSummaryTableData() zpages.SummaryPipelinesTableData {
 	data := zpages.SummaryPipelinesTableData{}
 
 	data.Rows = make([]zpages.SummaryPipelinesTableRowData, 0, len(srv.builtPipelines))

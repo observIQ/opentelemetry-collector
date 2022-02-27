@@ -42,7 +42,7 @@ type service struct {
 	builtExtensions extensions.Extensions
 }
 
-func newService(set *svcSettings) (*service, error) {
+func NewService(set *SvcSettings) (*service, error) {
 	srv := &service{
 		factories:           set.Factories,
 		buildInfo:           set.BuildInfo,

@@ -180,7 +180,7 @@ func (col *Collector) setupConfigurationComponents(ctx context.Context) error {
 
 	telemetrylogs.SetColGRPCLogger(col.logger, cfg.Service.Telemetry.Logs.Level)
 
-	col.service, err = newService(&svcSettings{
+	col.service, err = NewService(&SvcSettings{
 		BuildInfo: col.set.BuildInfo,
 		Factories: col.set.Factories,
 		Config:    cfg,

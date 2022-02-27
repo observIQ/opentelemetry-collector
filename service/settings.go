@@ -22,8 +22,8 @@ import (
 	"go.opentelemetry.io/collector/config"
 )
 
-// svcSettings holds configuration for building a new service.
-type svcSettings struct {
+// SvcSettings holds configuration for building a new service.
+type SvcSettings struct {
 	// Factories component factories.
 	Factories component.Factories
 

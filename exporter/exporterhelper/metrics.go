@@ -74,6 +74,10 @@ func (req *metricsRequest) count() int {
 	return req.md.DataPointCount()
 }
 
+func (req *metricsRequest) size() int {
+	return req.md.Size()
+}
+
 type metricsExporter struct {
 	*baseExporter
 	consumer.Metrics
@@ -130,6 +134,6 @@ type metricsSenderWithObservability struct {
 func (mewo *metricsSenderWithObservability) send(req request) error {
 	req.setContext(mewo.obsrep.StartMetricsOp(req.context()))
 	err := mewo.nextSender.send(req)
-	mewo.obsrep.EndMetricsOp(req.context(), req.count(), err)
+	mewo.obsrep.EndMetricsOp(req.context(), req.count(), req.size(), err)
 	return err
 }

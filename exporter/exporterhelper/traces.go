@@ -74,6 +74,10 @@ func (req *tracesRequest) count() int {
 	return req.td.SpanCount()
 }
 
+func (req *tracesRequest) size() int {
+	return req.td.SpanCount()
+}
+
 type traceExporter struct {
 	*baseExporter
 	consumer.Traces
@@ -132,6 +136,6 @@ func (tewo *tracesExporterWithObservability) send(req request) error {
 	req.setContext(tewo.obsrep.StartTracesOp(req.context()))
 	// Forward the data to the next consumer (this pusher is the next).
 	err := tewo.nextSender.send(req)
-	tewo.obsrep.EndTracesOp(req.context(), req.count(), err)
+	tewo.obsrep.EndTracesOp(req.context(), req.count(), req.size(), err)
 	return err
 }

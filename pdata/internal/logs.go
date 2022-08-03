@@ -68,6 +68,10 @@ func (ld Logs) Clone() Logs {
 	return cloneLd
 }
 
+func (ld Logs) Size() int {
+	return ld.orig.Size()
+}
+
 // LogRecordCount calculates the total number of log records.
 func (ld Logs) LogRecordCount() int {
 	logCount := 0

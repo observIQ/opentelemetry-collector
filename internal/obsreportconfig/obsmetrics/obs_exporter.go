@@ -25,16 +25,22 @@ const (
 
 	// SentSpansKey used to track spans sent by exporters.
 	SentSpansKey = "sent_spans"
+	// SentSpanDataSizeKey used to track spans sent by exporters.
+	SentSpanDataSizeKey = "sent_span_data_size_key"
 	// FailedToSendSpansKey used to track spans that failed to be sent by exporters.
 	FailedToSendSpansKey = "send_failed_spans"
 
 	// SentMetricPointsKey used to track metric points sent by exporters.
 	SentMetricPointsKey = "sent_metric_points"
+	// SentMetricPointDataSizeKey used to track metric points sent by exporters.
+	SentMetricPointDataSizeKey = "sent_metric_point_data_size_key"
 	// FailedToSendMetricPointsKey used to track metric points that failed to be sent by exporters.
 	FailedToSendMetricPointsKey = "send_failed_metric_points"
 
 	// SentLogRecordsKey used to track logs sent by exporters.
 	SentLogRecordsKey = "sent_log_records"
+	// SentLogRecordDataSizeKey used to track logs sent by exporters.
+	SentLogRecordDataSizeKey = "sent_log_record_data_size_key"
 	// FailedToSendLogRecordsKey used to track logs that failed to be sent by exporters.
 	FailedToSendLogRecordsKey = "send_failed_log_records"
 )
@@ -52,10 +58,15 @@ var (
 	// on backend and exporter are expected to be the same. Translation issues
 	// that result in a different number of elements should be reported in a
 	// separate way.
+
 	ExporterSentSpans = stats.Int64(
 		ExporterPrefix+SentSpansKey,
 		"Number of spans successfully sent to destination.",
 		stats.UnitDimensionless)
+	ExporterSentSpanDataSize = stats.Int64(
+		ExporterPrefix+SentSpanDataSizeKey,
+		"Size of spans successfully sent to destination.",
+		stats.UnitBytes)
 	ExporterFailedToSendSpans = stats.Int64(
 		ExporterPrefix+FailedToSendSpansKey,
 		"Number of spans in failed attempts to send to destination.",
@@ -64,6 +75,10 @@ var (
 		ExporterPrefix+SentMetricPointsKey,
 		"Number of metric points successfully sent to destination.",
 		stats.UnitDimensionless)
+	ExporterSentMetricPointDataSize = stats.Int64(
+		ExporterPrefix+SentMetricPointDataSizeKey,
+		"Size of metric points successfully sent to destination.",
+		stats.UnitBytes)
 	ExporterFailedToSendMetricPoints = stats.Int64(
 		ExporterPrefix+FailedToSendMetricPointsKey,
 		"Number of metric points in failed attempts to send to destination.",
@@ -72,6 +87,10 @@ var (
 		ExporterPrefix+SentLogRecordsKey,
 		"Number of log record successfully sent to destination.",
 		stats.UnitDimensionless)
+	ExporterSentLogRecordDataSize = stats.Int64(
+		ExporterPrefix+SentLogRecordDataSizeKey,
+		"Size of log record successfully sent to destination.",
+		stats.UnitBytes)
 	ExporterFailedToSendLogRecords = stats.Int64(
 		ExporterPrefix+FailedToSendLogRecordsKey,
 		"Number of log records in failed attempts to send to destination.",

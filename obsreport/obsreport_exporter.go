@@ -62,9 +62,9 @@ func (exp *Exporter) StartTracesOp(ctx context.Context) context.Context {
 }
 
 // EndTracesOp completes the export operation that was started with StartTracesOp.
-func (exp *Exporter) EndTracesOp(ctx context.Context, numSpans int, err error) {
+func (exp *Exporter) EndTracesOp(ctx context.Context, numSpans, sizeSent int, err error) {
 	numSent, numFailedToSend := toNumItems(numSpans, err)
-	exp.recordMetrics(ctx, numSent, numFailedToSend, obsmetrics.ExporterSentSpans, obsmetrics.ExporterFailedToSendSpans)
+	exp.recordMetrics(ctx, numSent, int64(sizeSent), numFailedToSend, obsmetrics.ExporterSentSpans, obsmetrics.ExporterSentSpanDataSize, obsmetrics.ExporterFailedToSendSpans)
 	endSpan(ctx, err, numSent, numFailedToSend, obsmetrics.SentSpansKey, obsmetrics.FailedToSendSpansKey)
 }
 
@@ -77,9 +77,9 @@ func (exp *Exporter) StartMetricsOp(ctx context.Context) context.Context {
 
 // EndMetricsOp completes the export operation that was started with
 // StartMetricsOp.
-func (exp *Exporter) EndMetricsOp(ctx context.Context, numMetricPoints int, err error) {
+func (exp *Exporter) EndMetricsOp(ctx context.Context, numMetricPoints, sizeSent int, err error) {
 	numSent, numFailedToSend := toNumItems(numMetricPoints, err)
-	exp.recordMetrics(ctx, numSent, numFailedToSend, obsmetrics.ExporterSentMetricPoints, obsmetrics.ExporterFailedToSendMetricPoints)
+	exp.recordMetrics(ctx, numSent, int64(sizeSent), numFailedToSend, obsmetrics.ExporterSentMetricPoints, obsmetrics.ExporterSentMetricPointDataSize, obsmetrics.ExporterFailedToSendMetricPoints)
 	endSpan(ctx, err, numSent, numFailedToSend, obsmetrics.SentMetricPointsKey, obsmetrics.FailedToSendMetricPointsKey)
 }
 
@@ -91,9 +91,10 @@ func (exp *Exporter) StartLogsOp(ctx context.Context) context.Context {
 }
 
 // EndLogsOp completes the export operation that was started with StartLogsOp.
-func (exp *Exporter) EndLogsOp(ctx context.Context, numLogRecords int, err error) {
+func (exp *Exporter) EndLogsOp(ctx context.Context, numLogRecords, sizeSent int, err error) {
 	numSent, numFailedToSend := toNumItems(numLogRecords, err)
-	exp.recordMetrics(ctx, numSent, numFailedToSend, obsmetrics.ExporterSentLogRecords, obsmetrics.ExporterFailedToSendLogRecords)
+	// TODO record sizes
+	exp.recordMetrics(ctx, numSent, int64(sizeSent), numFailedToSend, obsmetrics.ExporterSentLogRecords, obsmetrics.ExporterSentLogRecordDataSize, obsmetrics.ExporterFailedToSendLogRecords)
 	endSpan(ctx, err, numSent, numFailedToSend, obsmetrics.SentLogRecordsKey, obsmetrics.FailedToSendLogRecordsKey)
 }
 
@@ -105,15 +106,15 @@ func (exp *Exporter) startOp(ctx context.Context, operationSuffix string) contex
 	return ctx
 }
 
-func (exp *Exporter) recordMetrics(ctx context.Context, numSent, numFailedToSend int64, sentMeasure, failedToSendMeasure *stats.Int64Measure) {
+func (exp *Exporter) recordMetrics(ctx context.Context, numSent, sizeSent, numFailedToSend int64, sentMeasure, sizeMeasure, failedToSendMeasure *stats.Int64Measure) {
 	if obsreportconfig.Level() == configtelemetry.LevelNone {
 		return
 	}
 	// Ignore the error for now. This should not happen.
 	if numFailedToSend > 0 {
-		_ = stats.RecordWithTags(ctx, exp.mutators, sentMeasure.M(numSent), failedToSendMeasure.M(numFailedToSend))
+		_ = stats.RecordWithTags(ctx, exp.mutators, sentMeasure.M(numSent), failedToSendMeasure.M(numFailedToSend), sizeMeasure.M(sizeSent))
 	} else {
-		_ = stats.RecordWithTags(ctx, exp.mutators, sentMeasure.M(numSent))
+		_ = stats.RecordWithTags(ctx, exp.mutators, sentMeasure.M(numSent), sizeMeasure.M(sizeSent))
 	}
 }
 

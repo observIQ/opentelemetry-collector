@@ -82,10 +82,13 @@ func allViews() *ObsMetrics {
 	// Exporter views.
 	measures = []*stats.Int64Measure{
 		obsmetrics.ExporterSentSpans,
+		obsmetrics.ExporterSentSpanDataSize,
 		obsmetrics.ExporterFailedToSendSpans,
 		obsmetrics.ExporterSentMetricPoints,
+		obsmetrics.ExporterSentMetricPointDataSize,
 		obsmetrics.ExporterFailedToSendMetricPoints,
 		obsmetrics.ExporterSentLogRecords,
+		obsmetrics.ExporterSentLogRecordDataSize,
 		obsmetrics.ExporterFailedToSendLogRecords,
 	}
 	tagKeys = []tag.Key{obsmetrics.TagKeyExporter}

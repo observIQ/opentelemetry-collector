@@ -50,6 +50,7 @@ type request interface {
 	onError(error) request
 	// Returns the count of spans/metric points or log records.
 	count() int
+	size() int
 
 	// PersistentRequest provides interface with additional capabilities required by persistent queue
 	internal.PersistentRequest

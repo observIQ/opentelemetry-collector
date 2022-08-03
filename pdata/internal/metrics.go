@@ -88,6 +88,10 @@ func (md Metrics) MetricCount() int {
 	return metricCount
 }
 
+func (md Metrics) Size() int {
+	return md.orig.Size()
+}
+
 // DataPointCount calculates the total number of data points.
 func (md Metrics) DataPointCount() (dataPointCount int) {
 	rms := md.ResourceMetrics()

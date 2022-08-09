@@ -400,6 +400,10 @@ func (mer *mockErrorRequest) count() int {
 	return 7
 }
 
+func (mer *mockErrorRequest) size() int {
+	return 7
+}
+
 func newErrorRequest(ctx context.Context) request {
 	return &mockErrorRequest{
 		baseRequest: baseRequest{ctx: ctx},
@@ -409,6 +413,7 @@ func newErrorRequest(ctx context.Context) request {
 type mockRequest struct {
 	baseRequest
 	cnt          int
+	sze          int
 	mu           sync.Mutex
 	consumeError error
 	requestCount *atomic.Int64
@@ -435,6 +440,7 @@ func (m *mockRequest) onError(error) request {
 	return &mockRequest{
 		baseRequest:  m.baseRequest,
 		cnt:          1,
+		sze:          1024,
 		consumeError: nil,
 		requestCount: m.requestCount,
 	}
@@ -448,6 +454,10 @@ func (m *mockRequest) checkNumRequests(t *testing.T, want int) {
 
 func (m *mockRequest) count() int {
 	return m.cnt
+}
+
+func (m *mockRequest) size() int {
+	return m.sze
 }
 
 func newMockRequest(ctx context.Context, cnt int, consumeError error) *mockRequest {

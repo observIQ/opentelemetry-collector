@@ -48,6 +48,7 @@ var (
 
 type testParams struct {
 	items int
+	size  int
 	err   error
 }
 
@@ -60,8 +61,8 @@ func TestReceiveTraceDataOp(t *testing.T) {
 	defer parentSpan.End()
 
 	params := []testParams{
-		{items: 13, err: errFake},
-		{items: 42, err: nil},
+		{items: 13, size: 130, err: errFake},
+		{items: 42, size: 420, err: nil},
 	}
 	for i, param := range params {
 		rec := NewReceiver(ReceiverSettings{

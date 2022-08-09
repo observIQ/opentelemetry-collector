@@ -93,7 +93,6 @@ func (exp *Exporter) StartLogsOp(ctx context.Context) context.Context {
 // EndLogsOp completes the export operation that was started with StartLogsOp.
 func (exp *Exporter) EndLogsOp(ctx context.Context, numLogRecords, sizeSent int, err error) {
 	numSent, numFailedToSend := toNumItems(numLogRecords, err)
-	// TODO record sizes
 	exp.recordMetrics(ctx, numSent, int64(sizeSent), numFailedToSend, obsmetrics.ExporterSentLogRecords, obsmetrics.ExporterSentLogRecordDataSize, obsmetrics.ExporterFailedToSendLogRecords)
 	endSpan(ctx, err, numSent, numFailedToSend, obsmetrics.SentLogRecordsKey, obsmetrics.FailedToSendLogRecordsKey)
 }

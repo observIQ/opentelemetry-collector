@@ -68,6 +68,12 @@ func (ld Logs) Clone() Logs {
 	return cloneLd
 }
 
+// Size returns the protobuf size of the logs.
+// This can be expensive to run repeatedly on large sets of logs
+func (ld Logs) Size() int {
+	return ld.orig.Size()
+}
+
 // LogRecordCount calculates the total number of log records.
 func (ld Logs) LogRecordCount() int {
 	logCount := 0

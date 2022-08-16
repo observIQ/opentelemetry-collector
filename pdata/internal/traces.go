@@ -69,6 +69,12 @@ func (td Traces) Clone() Traces {
 	return cloneTd
 }
 
+// Size returns the protobuf size of the traces.
+// This can be expensive to run repeatedly on large sets of traces
+func (td Traces) Size() int {
+	return td.orig.Size()
+}
+
 // SpanCount calculates the total number of spans.
 func (td Traces) SpanCount() int {
 	spanCount := 0

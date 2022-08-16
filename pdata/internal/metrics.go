@@ -73,6 +73,12 @@ func (md Metrics) ResourceMetrics() ResourceMetricsSlice {
 	return newResourceMetricsSlice(&md.orig.ResourceMetrics)
 }
 
+// Size returns the protobuf size of the metrics.
+// This can be expensive to run repeatedly on large sets of metrics.
+func (md Metrics) Size() int {
+	return md.orig.Size()
+}
+
 // MetricCount calculates the total number of metrics.
 func (md Metrics) MetricCount() int {
 	metricCount := 0

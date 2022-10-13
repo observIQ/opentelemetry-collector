@@ -34,7 +34,7 @@ var (
 
 	// Scheme name consist of a sequence of characters beginning with a letter and followed by any
 	// combination of letters, digits, plus ("+"), period ("."), or hyphen ("-").
-	locationRegexp = regexp.MustCompile(`^(?P<Scheme>[A-Za-z][A-Za-z0-9+.-]+):(?P<OpaqueValue>.*)$`)
+	locationRegexp = regexp.MustCompile(`^(?P<Scheme>[A-Za-z][A-Za-z0-9+.-]+):(?P<OpaqueValue>[\S\s]*)$`)
 
 	errTooManyRecursiveExpansions = errors.New("too many recursive expansions")
 )

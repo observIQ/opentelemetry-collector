@@ -86,6 +86,7 @@ func newService(set *settings) (*service, error) {
 	return srv, nil
 }
 
+// Start starts the extensions and pipelines. If Start fails Shutdown should be called to ensure a clean state.
 func (srv *service) Start(ctx context.Context) error {
 	srv.telemetrySettings.Logger.Info("Starting "+srv.buildInfo.Command+"...",
 		zap.String("Version", srv.buildInfo.Version),
@@ -128,7 +129,11 @@ func (srv *service) Shutdown(ctx context.Context) error {
 	}
 
 	srv.telemetrySettings.Logger.Info("Shutdown complete.")
-	// TODO: Shutdown TracerProvider, MeterProvider, and Sync Logger.
+
+	if err := srv.telemetryInitializer.shutdown(); err != nil {
+		errs = multierr.Append(errs, fmt.Errorf("failed to shutdown telemetry initializer: %w", err))
+	}
+	// TODO: Shutdown MeterProvider.
 	return errs
 }
 

@@ -1,6 +1,6 @@
 module go.opentelemetry.io/collector
 
-go 1.17
+go 1.21.0
 
 require (
 	contrib.go.opencensus.io/exporter/prometheus v0.4.0
@@ -17,7 +17,7 @@ require (
 	github.com/prometheus/common v0.32.1
 	github.com/rs/cors v1.8.2
 	github.com/shirou/gopsutil/v3 v3.22.1
-	github.com/spf13/cast v1.4.1
+	github.com/spf13/cast v1.9.2
 	github.com/spf13/cobra v1.3.0
 	github.com/stretchr/testify v1.7.0
 	go.opencensus.io v0.23.0

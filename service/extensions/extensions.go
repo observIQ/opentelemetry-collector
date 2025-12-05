@@ -7,6 +7,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"os"
 	"sort"
 
 	"go.uber.org/multierr"
@@ -177,6 +178,8 @@ type Settings struct {
 
 	// Extensions builder for extensions.
 	Extensions builders.Extension
+
+	SignalChannel chan os.Signal
 }
 
 type Option interface {
@@ -215,6 +218,7 @@ func New(ctx context.Context, set Settings, cfg Config, options ...Option) (*Ext
 			ID:                extID,
 			TelemetrySettings: componentattribute.TelemetrySettingsWithAttributes(set.Telemetry, *attribute.Extension(extID).Set()),
 			BuildInfo:         set.BuildInfo,
+			SignalChannel:     set.SignalChannel,
 		}
 
 		ext, err := set.Extensions.Create(ctx, extSet)

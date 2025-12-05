@@ -221,6 +221,7 @@ func (col *Collector) setupConfigurationComponents(ctx context.Context) error {
 		AsyncErrorChannel: col.asyncErrorChannel,
 		LoggingOptions:    col.set.LoggingOptions,
 		TelemetryFactory:  factories.Telemetry,
+		SignalChannel:     col.signalsChannel,
 	}, cfg.Service)
 	if err != nil {
 		return err

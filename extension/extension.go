@@ -6,6 +6,7 @@ package extension // import "go.opentelemetry.io/collector/extension"
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"go.opentelemetry.io/collector/component"
 )
@@ -26,6 +27,9 @@ type Settings struct {
 
 	// BuildInfo can be used by components for informational purposes
 	BuildInfo component.BuildInfo
+
+	// SignalChannel is the channel used by the collector process to receive signals from the OS.
+	SignalChannel chan os.Signal
 
 	// prevent unkeyed literal initialization
 	_ struct{}

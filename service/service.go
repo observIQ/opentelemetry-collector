@@ -9,6 +9,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"runtime"
 
 	config "go.opentelemetry.io/contrib/otelconf/v0.3.0"
@@ -93,6 +94,9 @@ type Settings struct {
 
 	// TelemetryFactory is the factory for creating internal telemetry providers.
 	TelemetryFactory telemetry.Factory
+
+	// SignalChannel is the channel used by the collector process to receive signals from the OS.
+	SignalChannel chan os.Signal
 }
 
 // Service represents the implementation of a component.Host.
@@ -120,6 +124,7 @@ func New(ctx context.Context, set Settings, cfg Config) (_ *Service, resultErr e
 			ModuleInfos:       set.ModuleInfos,
 			BuildInfo:         set.BuildInfo,
 			AsyncErrorChannel: set.AsyncErrorChannel,
+			SignalChannel:     set.SignalChannel,
 		},
 		collectorConf: set.CollectorConf,
 	}
@@ -293,9 +298,10 @@ func (srv *Service) Shutdown(ctx context.Context) error {
 func (srv *Service) initExtensions(ctx context.Context, cfg extensions.Config) error {
 	var err error
 	extensionsSettings := extensions.Settings{
-		Telemetry:  srv.telemetrySettings,
-		BuildInfo:  srv.buildInfo,
-		Extensions: srv.host.Extensions,
+		Telemetry:     srv.telemetrySettings,
+		BuildInfo:     srv.buildInfo,
+		Extensions:    srv.host.Extensions,
+		SignalChannel: srv.host.SignalChannel,
 	}
 	if srv.host.ServiceExtensions, err = extensions.New(ctx, extensionsSettings, cfg, extensions.WithReporter(srv.host.Reporter)); err != nil {
 		return fmt.Errorf("failed to build extensions: %w", err)

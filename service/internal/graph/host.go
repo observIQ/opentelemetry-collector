@@ -5,6 +5,7 @@ package graph // import "go.opentelemetry.io/collector/service/internal/graph"
 
 import (
 	"net/http"
+	"os"
 	"path"
 	"runtime"
 	"time"
@@ -43,6 +44,8 @@ type Host struct {
 	ServiceExtensions *extensions.Extensions
 
 	Reporter status.Reporter
+
+	SignalChannel chan os.Signal
 }
 
 func (host *Host) GetFactory(kind component.Kind, componentType component.Type) component.Factory {

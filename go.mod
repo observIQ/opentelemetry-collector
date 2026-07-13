@@ -1,6 +1,6 @@
 module go.opentelemetry.io/collector
 
-go 1.17
+go 1.24
 
 require (
 	contrib.go.opencensus.io/exporter/prometheus v0.4.0
@@ -9,7 +9,7 @@ require (
 	github.com/golang/snappy v0.0.4
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
-	github.com/klauspost/compress v1.14.4
+	github.com/klauspost/compress v1.19.0
 	github.com/knadh/koanf v1.4.0
 	github.com/magiconair/properties v1.8.5
 	github.com/mitchellh/mapstructure v1.4.3
